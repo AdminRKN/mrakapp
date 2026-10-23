@@ -1,0 +1,10 @@
+:root { --black: #0B0B0B; --cream: #F1ECE1; --red: #E0241B; --grey: #8A8680; }
+html { background: var(--black); }
+body { margin: 0; padding: 16px; font: 15px/1.55 'Inter Tight', 'Helvetica Neue', Arial, sans-serif; color: var(--black); }
+.paper { max-width: 720px; margin: 0 auto; background: var(--cream); padding: 28px 22px 36px; }
+h1 { font: 800 30px/.95 'Roboto Condensed', 'Arial Narrow', sans-serif; text-transform: uppercase; margin: 14px 0 8px; }
+h2 { font: 700 12px/1.2 ui-monospace, 'JetBrains Mono', Consolas, monospace; letter-spacing: .1em; text-transform: uppercase; margin: 24px 0 6px; border-top: 1.5px solid var(--black); padding-top: 10px; }
+p { margin: 0 0 10px; }
+a { color: var(--black); }
+.meta { font: 600 10px/1.5 ui-monospace, 'JetBrains Mono', Consolas, monospace; letter-spacing: .08em; text-transform: uppercase; color: rgb(11 11 11 / .6); }
+.todo { font: 700 11px/1.45 ui-monospace, Consolas, monospace; color: var(--red); border: 1.5px solid var(--red); padding: 8px 10px; }

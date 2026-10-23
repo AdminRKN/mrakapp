@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0B0B0B">
+  <title>MRAK8 Concept Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500..900&family=Inter+Tight:wght@400..700&family=JetBrains+Mono:wght@400..700&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/logo/mrak8-logo-white.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/tokens.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--mrak-black); color: var(--mrak-cream); }
+    body { font: 400 14px/1.5 var(--font-body); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+    .mono, .lbl { font-family: var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
+    .lbl { font-size: 10px; color: var(--mrak-grey); font-weight: 500; }
+    .board { display: grid; grid-template-columns: minmax(340px, 1fr) auto minmax(300px, 380px); gap: 0; min-height: 100vh; }
+    .col { padding: 28px 28px 60px; }
+    .col--l { border-right: 1px solid var(--line); overflow-y: auto; height: 100vh; position: sticky; top: 0; }
+    .col--c { display: grid; place-items: center; padding: 20px 36px; position: sticky; top: 0; height: 100vh; }
+    .col--r { border-left: 1px solid var(--line); overflow-y: auto; height: 100vh; position: sticky; top: 0; }
+    .brand { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+    .brand svg { height: 54px; width: auto; color: #fff; }
+    h1 { font: 900 44px/.86 var(--font-display); text-transform: uppercase; letter-spacing: -.01em; margin: 22px 0 10px; }
+    h1 em { font-style: normal; color: var(--mrak-red); }
+    h2 { font: 800 13px/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; margin: 34px 0 14px; display: flex; gap: 10px; align-items: baseline; }
+    h2 span { color: var(--mrak-red); }
+    p { margin: 0 0 10px; color: var(--cream-70); max-width: 62ch; }
+    p b { color: var(--mrak-cream); }
+    .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .tile { position: relative; aspect-ratio: 4 / 3; border: 1px solid var(--line); overflow: hidden; background: #0E0E0E; }
+    .tile figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 7px 9px; background: rgb(11 11 11 / .86); font: 600 9px/1.35 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--mrak-grey); }
+    .tile figcaption b { color: var(--mrak-cream); display: block; font-size: 10px; }
+    figure { margin: 0; }
+    .sw { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--line); }
+    .sw i { width: 56px; height: 40px; display: block; border: 1px solid var(--line); }
+    .sw b { font: 700 12px/1.2 var(--font-mono); display: block; }
+    .sw span { font: 500 10px/1.4 var(--font-mono); color: var(--mrak-grey); text-transform: uppercase; letter-spacing: .04em; }
+    .type { border-bottom: 1px dashed var(--line); padding: 12px 0; }
+    .type .s1 { font: 900 46px/.85 var(--font-display); text-transform: uppercase; letter-spacing: -.015em; }
+    .type .s2 { font: 500 15px/1.4 var(--font-body); }
+    .type .s3 { font: 600 12px/1.4 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
+    .curves { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .curve { border: 1px solid var(--line); padding: 8px; }
+    .curve svg { width: 100%; height: auto; display: block; }
+    .curve .lbl { display: block; margin-top: 6px; line-height: 1.35; }
+    .curve .lbl b { color: var(--mrak-cream); display: block; }
+    .dur { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 8px; }
+    .dur div { border: 1px solid var(--line); padding: 8px 6px; text-align: center; font: 700 12px/1.2 var(--font-mono); }
+    .dur span { display: block; font-size: 9px; color: var(--mrak-grey); font-weight: 500; margin-top: 3px; }
+    .space { display: flex; align-items: flex-end; gap: 6px; }
+    .space div { background: var(--mrak-red); width: 14px; }
+    .space span { font: 600 9px/1 var(--font-mono); color: var(--mrak-grey); display: block; margin-top: 4px; text-align: center; }
+    ul.pr { margin: 0; padding: 0; list-style: none; counter-reset: p; }
+    ul.pr li { counter-increment: p; display: grid; grid-template-columns: 30px 1fr; padding: 9px 0; border-bottom: 1px dashed var(--line); color: var(--cream-70); }
+    ul.pr li::before { content: '0' counter(p); font: 700 11px/1.5 var(--font-mono); color: var(--mrak-red); }
+    ul.pr b { color: var(--mrak-cream); }
+
+    /* phone */
+    .phone-wrap { display: grid; justify-items: center; gap: 14px; }
+    .phone { position: relative; width: 410px; height: 864px; border-radius: 58px; padding: 10px; background: #161616; box-shadow: 0 0 0 1px #2a2a2a, 0 40px 80px rgb(0 0 0 / .7), inset 0 0 0 2px #232323; transform-origin: 50% 50%; }
+    .phone iframe { width: 390px; height: 844px; border: 0; border-radius: 48px; display: block; background: var(--mrak-black); }
+    .phone::after { content: ''; position: absolute; left: 50%; top: 21px; width: 118px; height: 34px; margin-left: -59px; background: #000; border-radius: 20px; pointer-events: none; }
+    .ctrls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    .ctrls button, .scr button { font: 700 10px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mrak-cream); background: none; border: 1px solid var(--line-strong); min-height: 34px; padding: 0 12px; cursor: pointer; }
+    .ctrls button.is-on { background: var(--mrak-cream); color: var(--mrak-black); border-color: var(--mrak-cream); }
+    .ctrls button:hover, .scr button:hover { border-color: var(--mrak-cream); }
+
+    /* screens list */
+    .scr { display: grid; gap: 4px; }
+    .scr button { display: grid; grid-template-columns: 26px 1fr auto; gap: 8px; align-items: center; text-align: left; min-height: 38px; font-size: 11px; }
+    .scr button i { font-style: normal; color: var(--mrak-grey); }
+    .scr button small { color: var(--mrak-grey); font-size: 9px; }
+    .scr button.is-on { border-color: var(--mrak-red); color: var(--mrak-red); }
+    .note { margin-top: 14px; border: 1px solid var(--line); padding: 12px; min-height: 120px; }
+    .note h3 { margin: 0 0 8px; font: 800 20px/.95 var(--font-display); text-transform: uppercase; }
+    .note ul { margin: 0; padding-left: 16px; color: var(--cream-70); }
+    .note li { margin: 4px 0; }
+    .note code { font: 500 11px/1.4 var(--font-mono); color: var(--mrak-cream); background: var(--cream-08); padding: 0 4px; }
+    .hlog { margin-top: 14px; border: 1px solid var(--line); padding: 10px; font: 500 10.5px/1.6 var(--font-mono); color: var(--mrak-grey); height: 170px; overflow: hidden; }
+    .hlog div:first-child { color: var(--mrak-cream); }
+    .hlog b { color: var(--mrak-red); font-weight: 700; }
+
+    @media (max-width: 1180px) { .board { grid-template-columns: 1fr auto; } .col--r { grid-column: 1 / -1; height: auto; position: static; border-left: 0; border-top: 1px solid var(--line); } }
+    @media (max-width: 860px) {
+      .board { display: block; }
+      .col--l, .col--c, .col--r { height: auto; position: static; border: 0; }
+      .col--c { display: none; }
+      .mobile-open { display: flex !important; }
+    }
+    .mobile-open { display: none; margin-top: 18px; }
+  </style>
+</head>
+<body>
+<div class="board">
+  <!-- LEFT: concept, moodboard, tokens -->
+  <aside class="col col--l">
+    <div class="brand"><span id="logo"></span><div class="lbl" style="text-align:right">CONCEPT v0.1<br>20.10.2026</div></div>
+    <h1>Central Booking<br>&amp; <em>Intake</em> Center</h1>
+    <p>Мини-апп — это <b>центр оформления</b> со спины худи. Покупатель — <b>SUBJECT</b>, товары — <b>вещдоки</b>, корзина — <b>пакет для улик</b>, чекаут — <b>протокол</b>, оплата — <b>оформление</b>. Холодно, бюрократично, с самоиронией «НЕ ДИЗАЙНЕР». Вещь всегда главная: CCTV-слой 3–5% и уходит при reduced motion.</p>
+    <a class="mobile-open" href="index.html" style="color:var(--mrak-cream);font:700 12px var(--font-mono);letter-spacing:.1em;border:1px solid var(--mrak-cream);padding:12px 16px;text-decoration:none">ОТКРЫТЬ ПРОТОТИП →</a>
+
+    <h2><span>01</span>Мудборд</h2>
+    <div class="tiles">
+      <figure class="tile" id="t-chart"><figcaption><b>Ростовая стена</b>фото на документы: шкала → фон карточки и ростомер размера</figcaption></figure>
+      <figure class="tile" id="t-cctv"><figcaption><b>CCTV OSD</b>REC, таймкод, детекция объекта, шум VHS</figcaption></figure>
+      <figure class="tile" id="t-bag"><figcaption><b>Пакет для улик</b>прозрачный пакет, зип-полоса (зип худи), бирка-опись</figcaption></figure>
+      <figure class="tile" id="t-stamp"><figcaption><b>Резиновый штамп</b>красные чернила, неровный оттиск, удар + haptic heavy</figcaption></figure>
+      <figure class="tile" id="t-tape"><figcaption><b>Лента ограждения</b>бегущая строка со спины худи между секциями</figcaption></figure>
+      <figure class="tile" id="t-form"><figcaption><b>Бланк протокола</b>подчёркнутые поля, мелкий капс, «М.П.» под финальный штамп</figcaption></figure>
+    </div>
+    <p style="margin-top:12px">Референсы: NYPD Central Booking mugshots, камеры наблюдения 90-х и современная AI-детекция, советские бланки и «место печати», термочеки, швейцарская типографика с текстом за краем экрана, ирония Vetements.</p>
+
+    <h2><span>02</span>Цвет · пипетка с фото</h2>
+    <div id="swatches"></div>
+    <p class="lbl" style="margin-top:10px;line-height:1.6">ПИПЕТКА: ТКАНЬ В СВЕТЕ #DAD4C8 → С ПОПРАВКОЙ ЭКСПОЗИЦИИ #F1ECE1 · ПРИНТ НА ФОТО #8A0000–#910B18 → ~#B4101F. ПЕЧАТНЫЙ КРАСНЫЙ НА ЧЁРНОМ = 2.6:1, НЕЧИТАЕМО; НА ЭКРАНЕ БЕРЁМ #E0241B (≈ SIGNAL #D9261C САЙТА). ФОН ФОТО = ЧИСТЫЙ #000, ВЫРЕЗАН В АЛЬФУ.</p>
+
+    <h2><span>03</span>Типографика · всё с кириллицей</h2>
+    <div class="type"><div class="s1">Не дизайнер</div><div class="lbl" style="margin-top:6px">ROBOTO CONDENSED 900–700 · КАПС · −1.5% · LH .86 · ЛУЧШЕЕ СОВПАДЕНИЕ С ПРИНТОМ · <a href="type-check.html" target="_blank" style="color:var(--mrak-cream)">СВЕРКА ↗</a></div></div>
+    <div class="type"><div class="s2">Вещдок выдаётся после оформления протокола. Срок этапирования 1–3 дня.</div><div class="lbl" style="margin-top:6px">INTER TIGHT 400–600 · ТЕКСТ · 15/1.4 · КАК НА САЙТЕ БРЕНДА</div></div>
+    <div class="type"><div class="s3">SUBJECT #08-4417 · 6 900 ₽ · ОСТ. 3</div><div class="lbl" style="margin-top:6px">JETBRAINS MONO 500–700 · СЛУЖЕБНОЕ: НОМЕРА, ЦЕНЫ, СТАТУСЫ · +6% TRACKING</div></div>
+
+    <h2><span>04</span>Сетка и отступы</h2>
+    <div class="space" id="space"></div>
+    <p class="lbl" style="margin-top:12px">ШАГ 4 PX · ПОЛЯ 16 PX · ТАП-ЗОНЫ ≥ 44 PX · РАДИУС 0 (ШТАМП 3–5 PX, ПАКЕТ 10 PX СНИЗУ) · ОТ 320 PX</p>
+
+    <h2><span>05</span>Моушн</h2>
+    <div class="curves" id="curves"></div>
+    <div class="dur"><div>80<span>TICK · SHAKE</span></div><div>160<span>FAST · ТАП</span></div><div>320<span>BASE · ЭКРАН</span></div><div>700<span>SLOW · ГЕРОЙ</span></div><div>1100<span>SCENE · СПЛЭШ</span></div></div>
+    <p style="margin-top:12px">Механика бюрократии: печать — <b>steps()</b> и посимвольный набор, штамп — <b>ускорение в бумагу</b> + отскок, CRT-гашение при выходе из сплэша, смена вкладок — <b>переключение камеры</b> (шум 260 мс). Только transform/opacity, 60 fps; шум, гироскоп и 3D отключаются при reduced motion и на слабых Android (класс LOW из user-agent Telegram).</p>
+
+    <h2><span>06</span>Принципы</h2>
+    <ul class="pr">
+      <li><span><b>Вещь — главная.</b> Эффекты 3–5% и никогда поверх товара.</span></li>
+      <li><span><b>Покупка за 4 тапа:</b> дело → «Изъять» → «Оформить протокол» → «Оплатить».</span></li>
+      <li><span><b>Нативное там, где Telegram:</b> MainButton, SecondaryButton, BackButton, HapticFeedback, CloudStorage, платёжная форма.</span></li>
+      <li><span><b>Каждый экран — документ:</b> номер, дата, субъект. Ничего «офисного».</span></li>
+      <li><span><b>Красный — только улика:</b> CTA, штамп, REC, недоступный размер.</span></li>
+    </ul>
+  </aside>
+
+  <!-- CENTER: phone -->
+  <main class="col col--c">
+    <div class="phone-wrap">
+      <div class="phone" id="phone"><iframe id="app" src="index.html?frame=1&amp;fresh=1" title="Прототип мини-аппа MRAK8" allow="clipboard-write"></iframe></div>
+      <div class="ctrls">
+        <button type="button" data-act="splash">↻ Сплэш</button>
+        <button type="button" data-act="rm">Reduced motion</button>
+        <button type="button" data-act="cctv" class="is-on">CCTV-слой</button>
+        <a href="index.html" target="_blank" style="text-decoration:none"><button type="button">Открыть отдельно ↗</button></a>
+      </div>
+    </div>
+  </main>
+
+  <!-- RIGHT: screens + notes + haptic log -->
+  <aside class="col col--r">
+    <div class="lbl" style="margin-bottom:10px">ЭКРАНЫ · ТАП — ПЕРЕЙТИ</div>
+    <div class="scr" id="scr"></div>
+    <div class="note" id="note"></div>
+    <div class="lbl" style="margin-top:16px">HAPTIC LOG · ЧТО ПОЧУВСТВУЕТ ТЕЛЕФОН</div>
+    <div class="hlog" id="hlog"><div>— ждём касаний —</div></div>
+  </aside>
+</div>
+
+<script src="js/logo-data.js"></script>
+<script>
+(function () {
+  const L = window.MRAK_LOGO, VB = L.viewBox.join(' ');
+  const logo = `<svg viewBox="${VB}" fill="currentColor" aria-label="MRAK8"><path fill-rule="evenodd" d="${L.letters.m}${L.letters.r}${L.letters.a}${L.letters.k}"/><path fill-rule="evenodd" d="${L.ringTop}"/><path fill-rule="evenodd" d="${L.ringBottom}"/></svg>`;
+  document.getElementById('logo').innerHTML = logo;
+  const $ = (s) => document.querySelector(s);
+
+  /* moodboard tiles, drawn with the same primitives as the app */
+  const chart = () => { let s = '<svg viewBox="0 0 200 150" width="100%" height="100%" preserveAspectRatio="none">'; for (let i = 0; i <= 30; i++) { const y = i * 5; const big = i % 5 === 0; s += `<line x1="0" x2="${big ? 200 : 14}" y1="${y}" y2="${y}" stroke="#F1ECE1" stroke-opacity="${big ? .35 : .15}"/>`; if (big && i) s += `<text x="3" y="${y - 2}" fill="#8A8680" font-family="JetBrains Mono" font-size="6">${200 - i * 2}</text>`; } s += '<path d="M100 40c-12 0-19 9-19 21 0 8 4 15 9 18l-1 7c-14 3-24 10-27 23v41h76v-41c-3-13-13-20-27-23l-1-7c5-3 9-10 9-18 0-12-7-21-19-21z" fill="#3a3835"/></svg>'; return s; };
+  $('#t-chart').insertAdjacentHTML('afterbegin', chart());
+  $('#t-cctv').insertAdjacentHTML('afterbegin', `<div style="position:absolute;inset:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px),#121212"></div>
+    <div style="position:absolute;left:10px;top:9px;font:700 10px var(--font-mono);color:#E0241B;letter-spacing:.08em">● REC · CAM_08</div><div style="position:absolute;right:10px;top:9px;font:600 10px var(--font-mono);color:#F1ECE1" id="tc">01:14:33</div>
+    <div style="position:absolute;left:28%;top:26%;width:44%;height:44%;border:1.5px solid #F1ECE1"><div style="position:absolute;left:-1px;bottom:calc(100% + 3px);font:700 8px var(--font-mono);background:#F1ECE1;color:#0B0B0B;padding:2px 4px">OBJ_001 · 0.97</div></div>`);
+  $('#t-bag').insertAdjacentHTML('afterbegin', `<div style="position:absolute;left:14%;right:14%;top:12%;bottom:22%;border:1px solid rgba(241,236,225,.2);border-radius:0 0 8px 8px;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.05) 38%,transparent 46%),rgba(241,236,225,.04)">
+    <div style="height:12px;border-bottom:1px solid rgba(241,236,225,.2);background:repeating-linear-gradient(90deg,rgba(241,236,225,.4) 0 3px,transparent 3px 6px) 6px 4px/calc(100% - 12px) 4px no-repeat"></div>
+    <div style="position:absolute;left:8px;top:20px;background:#E0241B;color:#F1ECE1;font:900 13px var(--font-display);padding:3px 7px;transform:rotate(-3deg);letter-spacing:.08em">EVIDENCE</div>
+    <div style="position:absolute;right:10px;bottom:10px;width:46%;height:42%;background:#F1ECE1"></div></div>`);
+  const stamp = `<svg viewBox="0 0 320 104" width="74%" style="position:absolute;left:13%;top:26%;transform:rotate(-9deg);color:#E0241B"><defs><filter id="ink"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="4"/><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.6 0 0 0 1.95"/><feComposite in="SourceGraphic" operator="in"/></filter></defs><g filter="url(#ink)" fill="none" stroke="currentColor"><rect x="5" y="5" width="310" height="94" rx="5" stroke-width="5"/><rect x="14" y="14" width="292" height="76" rx="2" stroke-width="2"/><text x="160" y="66" text-anchor="middle" fill="currentColor" stroke="none" font-family="Roboto Condensed" font-weight="900" font-size="52" textLength="264" lengthAdjust="spacingAndGlyphs">ОФОРМЛЕН</text></g></svg>`;
+  $('#t-stamp').insertAdjacentHTML('afterbegin', `<div style="position:absolute;inset:0;background:#F1ECE1"></div>${stamp}`);
+  $('#t-tape').insertAdjacentHTML('afterbegin', `<div style="position:absolute;inset:0;background:#121212"></div>${[[-8, 34, '#E0241B', '#F1ECE1'], [6, 58, '#F1ECE1', '#0B0B0B']].map(([r, t, bg, fg]) => `<div style="position:absolute;left:-10%;right:-10%;top:${t}%;height:22px;background:${bg};color:${fg};transform:rotate(${r}deg);display:flex;align-items:center;white-space:nowrap;overflow:hidden;font:800 12px var(--font-display);letter-spacing:.06em">${'NO EMOTIONAL CONTRABAND ■ ALL SUBJECTS ARE MONITORED ■ НЕ ДИЗАЙНЕР ■ '.repeat(3)}</div>`).join('')}`);
+  $('#t-form').insertAdjacentHTML('afterbegin', `<div style="position:absolute;inset:0;background:#F1ECE1;color:#0B0B0B;padding:12px 14px"><div style="font:800 17px/.9 var(--font-display);text-transform:uppercase">Протокол<br>оформления</div>
+    ${['ФИО СУБЪЕКТА', 'ТЕЛЕФОН'].map((l) => `<div style="margin-top:9px;font:600 6.5px var(--font-mono);letter-spacing:.1em;color:rgba(11,11,11,.6)">${l}</div><div style="border-bottom:1.2px solid #0B0B0B;height:12px"></div>`).join('')}
+    <div style="position:absolute;right:14px;bottom:30px;width:44px;height:44px;border:1.2px dashed rgba(11,11,11,.35);border-radius:50%;display:grid;place-items:center;font:700 7px var(--font-mono);color:rgba(11,11,11,.4)">М.П.</div></div>`);
+  setInterval(() => { const d = new Date(); const t = $('#tc'); if (t) t.textContent = d.toTimeString().slice(0, 8); }, 1000);
+
+  /* swatches with contrast */
+  const lum = (hex) => { const c = hex.match(/\w\w/g).map((x) => parseInt(x, 16) / 255).map((v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
+  const cr = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return ((x + 0.05) / (y + 0.05)).toFixed(1); };
+  const SW = [
+    ['#0B0B0B', '--mrak-black', 'ФОН · ЧЕРНИЛА НА БУМАГЕ · THEME-COLOR'],
+    ['#F1ECE1', '--mrak-cream', `ТКАНЬ · БУМАГА · ТЕКСТ — ${cr('#F1ECE1', '#0B0B0B')}:1 НА ЧЁРНОМ`],
+    ['#E0241B', '--mrak-red', `CTA · ШТАМП · REC — ${cr('#E0241B', '#0B0B0B')}:1 НА ЧЁРНОМ (КРУПНЫЙ ТЕКСТ)`],
+    ['#8A8680', '--mrak-grey', `СЛУЖЕБНОЕ · ЛИНЕЙКИ — ${cr('#8A8680', '#0B0B0B')}:1 · AA`],
+    ['#FFFFFF', '--mrak-white', `ТОЛЬКО ТЕКСТ НА КРАСНОМ — ${cr('#FFFFFF', '#E0241B')}:1 · AA`],
+  ];
+  $('#swatches').innerHTML = SW.map(([c, n, r]) => `<div class="sw"><i style="background:${c}"></i><div><b>${n} · ${c}</b><span>${r}</span></div></div>`).join('');
+
+  $('#space').innerHTML = [4, 8, 12, 16, 24, 32, 48, 72].map((v) => `<div style="display:grid;justify-items:center"><div style="height:${v}px"></div><span>${v}</span></div>`).join('');
+
+  const curve = (name, p, use) => { const [a, b, c, d] = p; return `<div class="curve"><svg viewBox="-4 -14 108 128"><rect x="0" y="0" width="100" height="100" fill="none" stroke="#8A8680" stroke-opacity=".3"/><path d="M0 100 C ${a * 100} ${100 - b * 100} ${c * 100} ${100 - d * 100} 100 0" fill="none" stroke="#E0241B" stroke-width="2"/><circle r="4" fill="#F1ECE1"><animateMotion dur="1.6s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear" path="M0 100 C ${a * 100} ${100 - b * 100} ${c * 100} ${100 - d * 100} 100 0"/></circle></svg><span class="lbl"><b>${name}</b>${p.join(', ')}<br>${use}</span></div>`; };
+  $('#curves').innerHTML = curve('--ease-out', [0.16, 1, 0.3, 1], 'ПОЯВЛЕНИЯ, UI') + curve('--ease-in-out', [0.65, 0, 0.35, 1], 'ФЛИП, ЛИСТЫ') + curve('--ease-slam', [0.7, 0, 0.84, 0], 'ШТАМП В БУМАГУ') + curve('--ease-snap', [0.3, 1.5, 0.5, 1], 'РОСТОМЕР, МЕТКИ');
+
+  /* screens */
+  const SCREENS = [
+    ['Сплэш «Оформление»', null, 'splash', ['Буквы MRAK падают, кольца «8» раскручиваются из точки в CSS 3D (без Three.js — 0 КБ)', 'SCANNING SUBJECT → @username IDENTIFIED → ДОСТУП РАЗРЕШЁН', 'Аватар из <code>initDataUnsafe.user.photo_url</code> в рамке «фото на документы»', 'Тап — пропуск; повторный вход — 400 мс; выход — гашение CRT']],
+    ['Каталог · лента', { path: '#/', view: 'feed' }, '', ['Полноэкранные «дела», scroll-snap, параллакс номера/фото/текста', 'Рамка детекции «OBJ_001 · CONF» захватывает вещь', 'Наклон: <code>DeviceOrientation</code> (Bot API 8.0); на десктопе — мышь, на тач — свайп', 'Потяни вниз — восьмёрка-сканер обновляет дела']],
+    ['Каталог · картотека', { path: '#/', view: 'files' }, '', ['Плотная опись: №, фото, наименование, размеры (изъятые зачёркнуты), цена, остаток', 'Фильтры-штампы: ВСЕ / ХУДИ / ФУТБОЛКИ / АКСЕССУАРЫ / АРХИВ']],
+    ['Дело #001', { path: '#/case/001' }, '', ['Shared-element переход фото (View Transitions API, фолбэк — сдвиг)', 'Красная скан-линия, пока грузится hi-res', 'Свайп ←→ — 3D-поворот ФАС/СПИНА; маркеры 1–3 и тап по вещи — лупа ×3.2 со сноской', '<code>MainButton</code> «ИЗЪЯТЬ — 6 900 ₽» с shine → штамп ИЗЪЯТО, тряска 80 мс, heavy, полёт в пакет']],
+    ['Ростомер · размер', { path: '#/case/001', scrollTo: '.sizer' }, '', ['Тяни метку: рост 150–200 см → полосы XS–XL; щелчки <code>selectionChanged()</code> на делениях, light на смене размера', 'Справа — замеры моношрифтом; XL изъят: штриховка + красное зачёркивание, метка отъезжает к ближайшему', 'Рост «подшивается к делу» (CloudStorage) и выбирает размер на следующих вещах']],
+    ['Дроп скоро', { path: '#/case/002' }, '', ['Вещдок засекречен: техчертёж вместо фото + обратный отсчёт', '«Уведомить меня» — бот пришлёт сообщение в момент дропа']],
+    ['Sold out', { path: '#/case/003' }, '', ['Штамп SOLD OUT · «Вещдок изъят другим субъектом.»']],
+    ['Пакет для улик', { path: '#/bag', state: 'filled' }, '', ['Прозрачный пакет, зип-полоса, красная бирка EVIDENCE, бумажная опись', 'Свайп по строке влево — зачёркивание красным маркером, отмена в тосте', '«ОФОРМИТЬ ПРОТОКОЛ» — бегунок застёгивает зип']],
+    ['Пустой пакет', { path: '#/bag', state: 'empty' }, '', ['«Изъятых вещей нет. Подозрительно.»']],
+    ['Протокол (чекаут)', { path: '#/protocol', state: 'filled' }, '', ['Бланк: ФИО из Telegram, телефон — <code>requestContact()</code>', 'СДЭК / Почта / Самовывоз (список из админки), итог моношрифтом', '«С условиями содержания ознакомлен(а)» — подпись рисуется сама; место М.П.', '«ОПЛАТИТЬ» → <code>openInvoice()</code> (в прототипе — эмуляция формы ЮKassa)']],
+    ['Оформлен', { path: '#/booked/MRK-000123' }, '', ['Штамп ОФОРМЛЕН падает на «М.П.» + <code>notificationOccurred(\'success\')</code>', 'Квитанция печатается построчно: CASE, SUBJECT, позиции, QR дела', '«Поделиться» — <code>shareMessage</code> / <code>shareToStory</code>: карточка «Я оформлен в MRAK8»']],
+    ['Досье', { path: '#/dossier' }, '', ['Статусы-штампы: ПРИНЯТ → СОБРАН → ЭТАПИРОВАН → ДОСТАВЛЕН', 'Трек копируется по тапу']],
+    ['Связь потеряна', { path: '#/lost' }, '', ['«СВЯЗЬ С ЦЕНТРОМ ПОТЕРЯНА», помехи CCTV, «Повторить»']],
+    ['Control room', { path: '#/admin' }, '', ['Стена мониторов: выручка, заказы, средний чек, топ, остатки на исходе', 'Вкладки: товары, заказы, дропы, канал. Доступ — только ADMIN_IDS по подписи initData на сервере']],
+    ['Редактор вещдока', { path: '#/admin/p/001' }, '', ['Поля, фото ФАС/СПИНА/детали (drag-n-drop, 4:5 / 1:1), остатки по размерам, ростомер, замеры, статус, дроп']],
+    ['Заказы (админ)', { path: '#/admin/orders' }, '', ['Фильтры по статусам, смена статуса, трек → бот пишет покупателю, экспорт CSV']],
+  ];
+  const frame = $('#app');
+  let lastPick = 0;
+  const send = (msg) => frame.contentWindow && frame.contentWindow.postMessage(msg, '*');
+  $('#scr').innerHTML = SCREENS.map(([t, nav], i) => `<button type="button" data-i="${i}"><i>${String(i + 1).padStart(2, '0')}</i>${t}<small>${nav ? nav.path : '↻'}</small></button>`).join('');
+  const showNote = (i) => { const s = SCREENS[i]; $('#note').innerHTML = `<h3>${s[0]}</h3><ul>${s[3].map((x) => `<li>${x}</li>`).join('')}</ul>`; document.querySelectorAll('.scr button').forEach((b) => b.classList.toggle('is-on', +b.dataset.i === i)); };
+  $('#scr').addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    const i = +b.dataset.i, s = SCREENS[i];
+    lastPick = Date.now();
+    showNote(i);
+    if (s[2] === 'splash') send({ m8: 'splash' }); else send({ m8: 'go', ...s[1] });
+  });
+  showNote(0);
+
+  /* controls */
+  document.querySelector('.ctrls').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-act]'); if (!b) return;
+    const a = b.dataset.act;
+    if (a === 'splash') { send({ m8: 'splash' }); showNote(0); return; }
+    b.classList.toggle('is-on');
+    if (a === 'rm') { const on = b.classList.contains('is-on'); frame.src = 'index.html?frame=1&fresh=1&splash=0' + (on ? '&rm=1' : ''); }
+    if (a === 'cctv') send({ m8: 'class', cls: 'no-cctv', on: !b.classList.contains('is-on') });
+  });
+
+  /* haptic log + phone jolt */
+  const phone = $('#phone'), hlog = $('#hlog');
+  const ROUTE_TO_I = { catalog: 1, case: 3, bag: 7, protocol: 9, booked: 10, dossier: 11, lost: 12, admin: 13, editor: 14 };
+  addEventListener('message', (ev) => {
+    const d = ev.data || {};
+    if (d.m8 === 'haptic') {
+      const t = new Date().toTimeString().slice(0, 8);
+      hlog.insertAdjacentHTML('afterbegin', `<div>${t} · HapticFeedback.<b>${d.kind}</b></div>`);
+      while (hlog.children.length > 12) hlog.lastChild.remove();
+      const heavy = /heavy|rigid|success|error/.test(d.kind), px = heavy ? 3 : 1;
+      phone.animate([{ transform: 'translate(0,0)' }, { transform: `translate(${-px}px,${px / 2}px)` }, { transform: `translate(${px}px,${-px / 2}px)` }, { transform: 'translate(0,0)' }], { duration: heavy ? 120 : 60 });
+    }
+    if (d.m8 === 'route' && Date.now() - lastPick > 1500 && ROUTE_TO_I[d.name] != null && !document.querySelector('.scr button.is-on[data-i="' + ROUTE_TO_I[d.name] + '"]')) {
+      const i = d.name === 'case' && d.path.endsWith('002') ? 5 : d.name === 'case' && d.path.endsWith('003') ? 6 : ROUTE_TO_I[d.name];
+      showNote(i);
+    }
+  });
+
+  /* fit the phone to the viewport height */
+  const fit = () => { const k = Math.min(1, (innerHeight - 90) / 864, (innerWidth > 1180 ? 1 : 1)); phone.style.transform = `scale(${k})`; phone.parentElement.style.marginTop = `${-(864 * (1 - k)) / 2}px`; phone.parentElement.style.marginBottom = `${-(864 * (1 - k)) / 2}px`; };
+  addEventListener('resize', fit); fit();
+})();
+</script>
+</body>
+</html>

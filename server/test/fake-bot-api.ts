@@ -1,0 +1,50 @@
+import { createServer, type IncomingMessage } from 'node:http';
+import type { AddressInfo } from 'node:net';
+
+/** Minimal stand-in for https://api.telegram.org — records every call, answers like Telegram would. */
+export interface Call { method: string; body: Record<string, any>; test: boolean }
+
+export async function startFakeBotApi() {
+  const calls: Call[] = [];
+  const now = () => Math.floor(Date.now() / 1000);
+  let mid = 100;
+  const handlers: Record<string, (b: Record<string, any>) => unknown> = {
+    getMe: () => ({ id: 777000123, is_bot: true, first_name: 'MRAK8', username: 'mrak8_test_bot', can_join_groups: true, can_read_all_group_messages: false, supports_inline_queries: true }),
+    createInvoiceLink: (b) => `https://t.me/$invoice-${b.payload}`,
+    sendMessage: (b) => ({ message_id: ++mid, date: now(), chat: { id: Number(b.chat_id) || 0, type: 'private' }, text: b.text }),
+    sendPhoto: (b) => ({ message_id: ++mid, date: now(), chat: { id: 0, type: 'channel', title: String(b.chat_id ?? '') }, photo: [] }),
+    answerPreCheckoutQuery: () => true,
+    savePreparedInlineMessage: () => ({ id: 'prep-1', expiration_date: now() + 3600 }),
+  };
+  const read = async (req: IncomingMessage) => {
+    const chunks: Buffer[] = [];
+    for await (const c of req) chunks.push(c as Buffer);
+    return Buffer.concat(chunks);
+  };
+  const server = createServer(async (req, res) => {
+    // test environment calls look like /bot<token>/test/<method>
+    const [, test, method = ''] = (req.url || '').match(/^\/bot[^/]+\/(test\/)?(\w+)/) ?? [];
+    const raw = await read(req);
+    const ct = String(req.headers['content-type'] || '');
+    let body: Record<string, any> = {};
+    if (ct.includes('json')) body = raw.length ? JSON.parse(raw.toString('utf8')) : {};
+    else if (ct.includes('multipart')) {
+      // pull simple text fields out of the multipart body (enough for assertions)
+      const text = raw.toString('latin1');
+      for (const m of text.matchAll(/name="([^"]+)"\r\n\r\n([^\r]*)\r\n/g)) body[m[1]] = Buffer.from(m[2], 'latin1').toString('utf8');
+      body.__multipart = raw.length;
+    }
+    calls.push({ method, body, test: !!test });
+    const result = handlers[method] ? handlers[method](body) : true;
+    res.setHeader('content-type', 'application/json');
+    res.end(JSON.stringify({ ok: true, result }));
+  });
+  await new Promise<void>((r) => server.listen(0, '127.0.0.1', r));
+  const { port } = server.address() as AddressInfo;
+  return {
+    url: `http://127.0.0.1:${port}`,
+    calls,
+    of: (method: string) => calls.filter((c) => c.method === method),
+    close: () => new Promise<void>((r) => server.close(() => r())),
+  };
+}

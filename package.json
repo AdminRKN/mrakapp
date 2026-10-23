@@ -1,0 +1,33 @@
+{
+  "name": "mrak8",
+  "private": true,
+  "version": "0.2.0",
+  "description": "MRAK8 — Central Booking & Intake Center. Telegram Mini App shop: web (React+Vite), server (Fastify+grammY+Drizzle)",
+  "type": "module",
+  "workspaces": [
+    "shared",
+    "server",
+    "web"
+  ],
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "tunnel": "node scripts/tunnel.mjs",
+    "docker:local": "node scripts/docker-local.mjs",
+    "docker:public": "node scripts/docker-local.mjs --public",
+    "docker:local:logs": "docker compose -f docker-compose.local.yml logs -f app",
+    "docker:local:stop": "docker compose -f docker-compose.local.yml --profile public down",
+    "dev:server": "npm run dev -w server",
+    "dev:web": "npm run dev -w web",
+    "build": "npm run build -w web && npm run build -w server",
+    "start": "npm run start -w server",
+    "test": "npm run test -w server",
+    "typecheck": "npm run typecheck -w server && npm run typecheck -w web",
+    "db:generate": "npm run db:generate -w server",
+    "db:migrate": "npm run db:migrate -w server",
+    "db:seed": "npm run db:seed -w server",
+    "bot:setup": "npm run bot:setup -w server"
+  }
+}

@@ -1,0 +1,7 @@
+# localhost.run client for docker-compose.local.yml (profile "public"): a free public https address, no account.
+# Debian's OpenSSH 9.2: localhost.run closes the session on the first keepalive from Alpine's 9.7.
+# netcat-openbsd: the ssh connection goes through the VPN proxy, so the tunnel shows the VPN's IP, not the home one.
+FROM debian:bookworm-slim
+RUN apt-get update && apt-get install -y --no-install-recommends openssh-client netcat-openbsd && rm -rf /var/lib/apt/lists/*
+COPY tunnel.sh /tunnel.sh
+ENTRYPOINT ["sh", "/tunnel.sh"]

@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+.env.local
+server/data/
+data/
+*.log
+.DS_Store
+.vite/
+coverage/
+mrak8-local-ca.crt
+.claude/

@@ -1,0 +1,13 @@
+node_modules
+**/node_modules
+**/dist
+server/data
+data
+.env
+.env.*
+!.env.example
+prototype
+docs
+.claude
+*.log
+*.crt

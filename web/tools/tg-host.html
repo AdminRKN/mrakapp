@@ -1,0 +1,80 @@
+<!doctype html>
+<!-- Dev stand that plays Telegram Desktop for the mini app: the real telegram-web-app.js runs inside the iframe
+     (with all of Telegram's validation), this page answers CloudStorage and draws the native bottom buttons.
+     Open http://localhost:5173/tools/tg-host.html?app=<url-encoded mini app url with #tgWebAppData=…> -->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>TG host</title>
+<style>
+  body { margin: 0; background: #17212b; color: #c8d1da; font: 11px/1.4 ui-monospace, monospace; display: flex; gap: 10px; padding: 10px; }
+  .phone { width: 390px; display: flex; flex-direction: column; background: #000; }
+  iframe { width: 390px; height: 690px; border: 0; background: #0b0b0b; }
+  .bar { display: flex; gap: 6px; padding: 6px; min-height: 44px; box-sizing: border-box; }
+  .bar button { flex: 1; border: 0; border-radius: 8px; font: 700 13px system-ui; color: #fff; cursor: pointer; }
+  .bar button[disabled] { opacity: .5; cursor: default; }
+  #log { flex: 1; height: 734px; overflow: auto; white-space: pre-wrap; margin: 0; }
+  .err { color: #ff6b6b; }
+</style>
+</head>
+<body>
+<div class="phone">
+  <iframe id="app" title="mini app"></iframe>
+  <div class="bar" id="bar"></div>
+</div>
+<pre id="log"></pre>
+<script>
+  const app = document.getElementById('app');
+  const bar = document.getElementById('bar');
+  const logEl = document.getElementById('log');
+  const storage = {};
+  const buttons = { main: {}, secondary: {} };
+  const log = (m, cls) => { const s = document.createElement('div'); s.textContent = m; if (cls) s.className = cls; logEl.prepend(s); };
+  const send = (eventType, eventData) => app.contentWindow.postMessage(JSON.stringify({ eventType, eventData }), '*');
+
+  function draw() {
+    bar.innerHTML = '';
+    for (const [kind, b] of Object.entries(buttons)) {
+      if (!b.is_visible) continue;
+      const el = document.createElement('button');
+      el.textContent = b.text;
+      el.style.background = b.color || '#2ea6ff';
+      el.style.color = b.text_color || '#fff';
+      el.disabled = b.is_active === false || b.is_progress_visible;
+      el.onclick = () => send(kind === 'main' ? 'main_button_pressed' : 'secondary_button_pressed');
+      kind === 'secondary' && b.position === 'left' ? bar.prepend(el) : bar.append(el);
+    }
+  }
+
+  addEventListener('message', (e) => {
+    if (e.source !== app.contentWindow) return;
+    let m;
+    try { m = JSON.parse(e.data); } catch { return; }
+    const { eventType: t, eventData: d = {} } = m;
+    log(`${t} ${JSON.stringify(d)}`);
+    if (t === 'web_app_invoke_custom_method') {
+      const p = d.params || {};
+      let result = true;
+      if (d.method === 'getStorageValues') result = Object.fromEntries((p.keys || []).map((k) => [k, storage[k] ?? '']));
+      else if (d.method === 'saveStorageValue') storage[p.key] = p.value;
+      else if (d.method === 'getStorageKeys') result = Object.keys(storage);
+      send('custom_method_invoked', { req_id: d.req_id, result });
+    }
+    if (t === 'web_app_setup_main_button') { buttons.main = d; draw(); }
+    if (t === 'web_app_setup_secondary_button') { buttons.secondary = d; draw(); }
+    if (t === 'web_app_open_invoice') setTimeout(() => send('invoice_closed', { slug: d.slug, status: 'cancelled' }), 300);
+  });
+
+  app.addEventListener('load', () => {
+    // surface errors thrown inside the mini app (same origin in dev)
+    try {
+      app.contentWindow.addEventListener('error', (e) => log(`ERROR ${e.message}`, 'err'));
+      app.contentWindow.addEventListener('unhandledrejection', (e) => log(`REJECTION ${e.reason && e.reason.message}`, 'err'));
+      const ce = app.contentWindow.console.error;
+      app.contentWindow.console.error = (...a) => { log('console.error ' + a.map(String).join(' '), 'err'); ce.apply(app.contentWindow.console, a); };
+    } catch { /* cross-origin */ }
+  });
+  app.src = new URLSearchParams(location.search).get('app') || '/';
+</script>
+</body>
+</html>

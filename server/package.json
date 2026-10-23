@@ -1,0 +1,44 @@
+{
+  "name": "@mrak8/server",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsup",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/scripts.ts migrate",
+    "db:seed": "tsx src/scripts.ts seed",
+    "bot:setup": "tsx src/scripts.ts bot-setup"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1153.0",
+    "@electric-sql/pglite": "^0.5.10",
+    "@fastify/cors": "^11.3.1",
+    "@fastify/multipart": "^10.1.4",
+    "@fastify/static": "^10.1.6",
+    "@mrak8/shared": "^0.2.0",
+    "dotenv": "^18.0.8",
+    "drizzle-orm": "^0.45.4",
+    "fastify": "^5.12.7",
+    "grammy": "^1.46.0",
+    "https-proxy-agent": "^9.1.0",
+    "pg": "^8.23.1",
+    "sharp": "^0.35.5",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/pg": "^8.23.1",
+    "drizzle-kit": "^0.31.11",
+    "jsqr": "^1.4.0",
+    "pino-pretty": "^13.2.0",
+    "tsup": "^9.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  }
+}

@@ -1,0 +1,82 @@
+# Local run on this computer with the real bot — no server, domain or tunnel: npm run docker:local
+# Telegram accepts https://127.0.0.1 as a mini app address; Caddy serves it with a certificate from its own local CA,
+# which this computer has to trust once (the script says how). Only ADMIN_IDS get buttons to the local mini app.
+name: mrak8-local
+services:
+  db:
+    image: postgres:17-alpine
+    restart: on-failure
+    environment:
+      POSTGRES_USER: mrak8
+      POSTGRES_PASSWORD: mrak8
+      POSTGRES_DB: mrak8
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mrak8"]
+      interval: 3s
+      retries: 20
+
+  app:
+    build:
+      context: .
+      args:
+        VITE_MINIAPP_LINK: ${VITE_MINIAPP_LINK:-}
+    image: mrak8-local-app
+    restart: on-failure
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: "8080"
+      DEV_AUTH: "0"
+      TELEGRAM_ENV: prod
+      BOT_MODE: polling
+      # api.telegram.org through Docker Desktop's proxy, which follows the Windows proxy (Happ)
+      TELEGRAM_PROXY: ${DOCKER_TELEGRAM_PROXY:-http://http.docker.internal:3128}
+      DATABASE_URL: postgres://mrak8:mrak8@db:5432/mrak8
+      STORAGE_DRIVER: local
+      SERVE_WEB: "1"
+      PUBLIC_URL: https://127.0.0.1:8443
+      WEBAPP_URL: https://127.0.0.1:8443
+      MEDIA_PUBLIC_URL: /media
+      # npm run docker:public sets it: the app then follows the tunnel's address (see the tunnel service)
+      PUBLIC_URL_FILE: ${MRAK8_PUBLIC_URL_FILE:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - media:/app/server/data/media
+      - tunnel:/run/tunnel:ro
+
+  https:
+    image: caddy:2-alpine
+    restart: on-failure
+    ports:
+      - "127.0.0.1:8443:8443"
+    volumes:
+      - ./docker/Caddyfile.local:/etc/caddy/Caddyfile:ro
+      - caddy:/data
+    depends_on:
+      - app
+
+  # npm run docker:public — the shop on the internet through localhost.run (free, no account, the address changes)
+  tunnel:
+    profiles: ["public"]
+    build:
+      context: docker
+      dockerfile: Dockerfile.tunnel
+    image: mrak8-local-tunnel
+    restart: on-failure
+    environment:
+      # through Happ, so the tunnel shows the VPN's IP and not the home one; DOCKER_TUNNEL_PROXY= (empty) — directly
+      TUNNEL_PROXY: ${DOCKER_TUNNEL_PROXY-host.docker.internal:10809}
+    volumes:
+      - tunnel:/run/tunnel
+    depends_on:
+      - app
+
+volumes:
+  pgdata:
+  media:
+  caddy:
+  tunnel:

@@ -1,0 +1,54 @@
+# VPS deploy: docker compose up -d --build
+# needs .env (see .env.example) and a DNS A-record DOMAIN → server IP; Caddy issues the HTTPS certificate itself.
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: mrak8
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mrak8}
+      POSTGRES_DB: mrak8
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mrak8"]
+      interval: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      args:
+        VITE_MINIAPP_LINK: ${VITE_MINIAPP_LINK:-}
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://mrak8:${POSTGRES_PASSWORD:-mrak8}@db:5432/mrak8
+      SERVE_WEB: "1"
+      PUBLIC_URL: https://${DOMAIN}
+      WEBAPP_URL: https://${DOMAIN}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - media:/app/server/data/media
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN}
+    command: caddy reverse-proxy --from ${DOMAIN} --to app:8080
+    volumes:
+      - caddy:/data
+    depends_on:
+      - app
+
+volumes:
+  pgdata:
+  media:
+  caddy:

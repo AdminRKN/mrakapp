@@ -1,0 +1,70 @@
+/* ==========================================================================
+   MRAK8 · CENTRAL BOOKING & INTAKE CENTER — design tokens v0.1
+   Palette is 4 colours. Everything else is the same colours at an alpha.
+   ========================================================================== */
+:root {
+  /* — colour — sampled from the garment, see docs/DESIGN.md §2 */
+  --mrak-black: #0B0B0B;   /* background, ink on paper, site theme-color */
+  --mrak-cream: #F1ECE1;   /* fabric highlight, paper, primary text */
+  --mrak-red:   #E0241B;   /* print red on screen: CTA, stamps, REC. use sparingly */
+  --mrak-grey:  #8A8680;   /* service text, rulers, grids (5.4:1 on black) */
+  --mrak-white: #FFFFFF;   /* only: text on red (4.7:1) and the logo file */
+
+  --cream-70: rgb(241 236 225 / .70);
+  --cream-40: rgb(241 236 225 / .40);
+  --cream-16: rgb(241 236 225 / .16);
+  --cream-08: rgb(241 236 225 / .08);
+  --cream-04: rgb(241 236 225 / .04);
+  --grey-55:  rgb(138 134 128 / .55);
+  --grey-28:  rgb(138 134 128 / .28);
+  --grey-14:  rgb(138 134 128 / .14);
+  --red-24:   rgb(224 36 27 / .24);
+  --red-12:   rgb(224 36 27 / .12);
+  --ink-60:   rgb(11 11 11 / .60);
+  --ink-30:   rgb(11 11 11 / .30);
+  --ink-12:   rgb(11 11 11 / .12);
+
+  --line: var(--grey-28);
+  --line-strong: var(--grey-55);
+
+  /* — type — all three families carry Cyrillic */
+  --font-display: 'Roboto Condensed Variable', 'Roboto Condensed', 'Arial Narrow', 'Helvetica Neue', sans-serif; /* matches «НЕ ДИЗАЙНЕР» print */
+  --font-body: 'Inter Tight Variable', 'Inter Tight', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+
+  --fs-mega: clamp(150px, 56vw, 300px);   /* evidence number, bleeds off the edges */
+  --fs-d1: clamp(44px, 13.4vw, 64px);      /* screen titles */
+  --fs-d2: clamp(32px, 9.6vw, 44px);
+  --fs-d3: 26px;
+  --fs-d4: 19px;
+  --fs-body: 15px;
+  --fs-small: 13px;
+  --fs-mono: 11px;
+  --fs-micro: 10px;
+  --lh-display: .86;
+  --track-display: -.015em;
+  --track-mono: .06em;
+
+  /* — space: 4px grid — */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 72px;
+  --gutter: 16px;
+  --tap: 44px;
+  --radius: 0;          /* sharp everywhere; stamps get 3px, the bag gets its seal */
+
+  /* — motion — */
+  --ease-out: cubic-bezier(.16, 1, .3, 1);        /* UI, reveals */
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);    /* flips, sheets */
+  --ease-slam: cubic-bezier(.7, 0, .84, 0);       /* stamp approach: accelerates into the paper */
+  --ease-snap: cubic-bezier(.3, 1.5, .5, 1);      /* markers snapping to a size */
+  --d-tick: 80ms;     /* screen shake, haptic-paired */
+  --d-fast: 160ms;    /* taps, chips */
+  --d-base: 320ms;    /* screen transitions */
+  --d-slow: 700ms;    /* hero, receipt lines */
+  --d-scene: 1100ms;  /* splash acts */
+
+  /* — Telegram safe areas (set by telegram-web-app.js ≥ 8.0, emulated outside Telegram) — */
+  --safe-top: var(--tg-safe-area-inset-top, env(safe-area-inset-top, 0px));
+  --content-top: var(--tg-content-safe-area-inset-top, 0px);
+  --safe-bottom: var(--tg-safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+  --top: calc(var(--safe-top) + var(--content-top));
+}
