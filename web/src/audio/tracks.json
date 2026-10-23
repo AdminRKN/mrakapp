@@ -1,0 +1,42 @@
+{
+  "Playboi Carti, The Weeknd — RATHER LIE.mp3": {
+    "size": 8392664,
+    "bpm": 132.6,
+    "beat": 0.45,
+    "end": 208.1,
+    "key": "4A",
+    "db": -6.7
+  },
+  "The Weeknd, Playboi Carti, Madonna — Popular.mp3": {
+    "size": 8638968,
+    "bpm": 98.99,
+    "beat": 0.041,
+    "end": 213.9,
+    "key": "3A",
+    "db": -7.6
+  },
+  "VILLIAN, madk1d — ДИНАСТИЯ.mp3": {
+    "size": 2407906,
+    "bpm": 155.042,
+    "beat": 1.234,
+    "end": 149.75,
+    "key": "11B",
+    "db": -2.9
+  },
+  "korolevskij XVII — de jure.mp3": {
+    "size": 4572288,
+    "bpm": 172.188,
+    "beat": 0.365,
+    "end": 112.75,
+    "key": "7B",
+    "db": -5.5
+  },
+  "korolevskij XVII — vivre sa vie.mp3": {
+    "size": 3850493,
+    "bpm": 101.765,
+    "beat": 1.872,
+    "end": 94,
+    "key": "4A",
+    "db": -3.4
+  }
+}
