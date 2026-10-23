@@ -267,12 +267,13 @@ curl https://shop.mrak8.ru/api/health
 └── web/
     ├── index.html               подключает telegram-web-app.js
     ├── vite.config.ts           dev-сервер :5173, прокси /api и /media на :8080, .env из корня
-    ├── public/                  статика как есть: offer.html, privacy.html, audio/dynasty.mp3, share/*.jpg
+    ├── public/                  статика как есть: offer.html, privacy.html, share/*.jpg
     ├── tools/
     │   ├── tg-host.html         стенд «как Telegram Desktop»: мини-апп во фрейме с настоящим telegram-web-app.js
     │   └── share-cards.*        перерисовка картинок для «Поделиться»
     └── src/
         ├── main.tsx             старт: Telegram, звук, маршрут, восстановление пакета, рендер
+        ├── audio/               треки DJ SET: кладите сюда .mp3, имя файла = «Артист — Название»
         ├── App.tsx              каркас (шапка, экран, нижние вкладки), выбор экрана по маршруту, режим Control room
         ├── lib/
         │   ├── telegram.ts      адаптер Telegram: initData, кнопки Main/Secondary/Back, хаптика, CloudStorage, оплата, геопозиция
@@ -286,7 +287,7 @@ curl https://shop.mrak8.ru/api/health
         │   ├── shell.tsx        шапка, нижние вкладки, режим пульта (лента, вкладки), эмуляция кнопок Telegram, тосты
         │   ├── brand.tsx        логотип, ростомер, лента, фото с превью (Picture), таймер, часы
         │   ├── useMainButton.ts декларативные нативные кнопки Telegram для экрана
-        │   ├── DjSet.tsx        музыка: трек по кругу и кнопка-эквалайзер в шапке
+        │   ├── DjSet.tsx        DJ SET: треки из src/audio вперемешку с кроссфейдом, кнопка-эквалайзер в шапке
         │   └── CrashScreen.tsx  аварийный экран вместо чёрного при ошибке отрисовки
         ├── screens/
         │   ├── Splash.tsx       заставка «оформление» с фото профиля
